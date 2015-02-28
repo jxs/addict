@@ -22,7 +22,7 @@ defmodule Addict.BaseController do
       def register(conn, user_params) do
         {conn, message} = @manager.create(user_params)
         |> SessionInteractor.register(conn)
-        json conn, message
+        assign conn, :message, message
       end
 
       @doc """
@@ -33,7 +33,7 @@ defmodule Addict.BaseController do
        """
       def logout(conn, _) do
         {conn, message} = SessionInteractor.logout(conn)
-        json conn, message
+        assign conn, :message, message
       end
 
       @doc """
@@ -50,7 +50,7 @@ defmodule Addict.BaseController do
 
         {conn, message} = @manager.verify_password(email, password)
         |> SessionInteractor.login(conn)
-        json conn, message
+        assign conn, :message, message
       end
 
       @doc """
@@ -63,7 +63,7 @@ defmodule Addict.BaseController do
 
         {conn, message} = @manager.recover_password(email)
         |> SessionInteractor.password_recover(conn)
-        json conn, message
+        assign conn, :message, message
       end
 
       @doc """
@@ -78,7 +78,11 @@ defmodule Addict.BaseController do
 
         {conn, message} = @manager.reset_password(token, password, password_confirm)
         |> SessionInteractor.password_reset(conn)
-        json conn, message
+        assign conn, :message, message
+      end
+
+      def render_json(conn, params) do
+        json conn, conn.assigns[:message]
       end
 
       defoverridable Module.definitions_in(__MODULE__)
@@ -92,6 +96,7 @@ defmodule Addict.Controller do
    """
   use Phoenix.Controller
   plug :action
+  plug :render_json
   use Addict.BaseController
 
 end
