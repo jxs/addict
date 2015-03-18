@@ -1,4 +1,4 @@
-defmodule Addict.BaseController do
+defmodule Addict.BaseUserController do
   @moduledoc """
     Addict BaseController is used as a base to be extended by controllers if needed.
     BaseController has functions to receive User related requests directly from
@@ -90,13 +90,13 @@ defmodule Addict.BaseController do
   end
 end
 
-defmodule Addict.Controller do
+defmodule Addict.UserController do
   @moduledoc """
    Default controller used by Addict
    """
   use Phoenix.Controller
   plug :action
   plug :render_json
-  use Addict.BaseController
+  use Addict.BaseUserController
 
 end
